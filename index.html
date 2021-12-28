@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ada Arbitrage</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="style.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="title-app">
+          ADA Arbitrage
+      </div>
+      <div class="parameters">
+        <div>ADA price Binance:</div>
+        <div class="ada-binance">30</div>
+      </div>
+
+      <div class="parameters">
+        <div>ADA price Mercado Bitcoin:</div>
+        <div class="ada-mb">30</div>
+      </div>
+      
+      <div class="parameters">
+        <div>Ganho esperado de arbitragem:</div>
+        <div class="arb-gain">30</div>
+      </div>
+      
+      <div class="parameters">
+        <div >Taxa de transferência Binance:</div>
+        <div class="withdrawl-binance-cost">  </div>
+      </div>
+
+      <div class="parameters">
+        <div >Taxa de transferência Mercado Bitcoin:</div>
+        <div class="withdrawl-mb-cost">  </div>
+      </div>
+      
+      <div class="parameters">
+        <div>Taxa de venda MB:</div>
+        <div class="sell-mb-cost"></div>
+      </div>
+
+      <div class="parameters">
+        <div>Taxa de venda Binance:</div>
+        <div class="sell-binance-cost">0.1%</div>
+      </div>
+
+      <form id="form" >
+        <div class="parameters">
+          <label>Investimento:</label>
+          <input id="text">
+        </div>
+        <div class="parameters">
+          <div>Ganho Líquido Esperado:</div>
+          <div class="result"></div>
+        </div>
+        <div class="button-field">
+          <button class="button-app" onclick="computeGain(); return false">Compute</button>
+        </div>
+      </form> 
+
+
+    </div>
+
+    <script
+      type="text/javascript"
+      src="script.js"
+    ></script>
+  </body>
+</html>
