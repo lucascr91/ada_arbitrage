@@ -7,7 +7,7 @@ let urlBinance = `https://api.binance.com/api/v3/trades?symbol=${coinBinance}`;
 // update binance price
 const updateBinance = (response) => {
   document.querySelector(".ada-binance").textContent = parseFloat(
-    response[0]["price"]
+    response.slice(-1)[0]["price"]
   ).toFixed(2);
 };
 // update mb price
@@ -21,9 +21,9 @@ const computeArbitrage = (adaPriceBinance, adaPriceMb) => {
   let result;
   if (adaPriceBinance > adaPriceMb) {
     result =
-      ((adaPriceBinance - adaPriceMb) / adaPriceBinance).toFixed(2) + "%";
+      ((adaPriceBinance - adaPriceMb) / adaPriceBinance).toFixed(4) + "%";
   } else if (adaPriceMb > adaPriceBinance) {
-    result = ((adaPriceMb - adaPriceBinance) / adaPriceMb).toFixed(2) + "%";
+    result = ((adaPriceMb - adaPriceBinance) / adaPriceMb).toFixed(4) + "%";
   } else if (adaPriceMb === adaPriceBinance) {
     result = 0;
   }
@@ -54,7 +54,7 @@ document
       1 * parseFloat(document.querySelector(".ada-mb").textContent)
     ).toFixed(2);
     document.querySelector(".sell-mb-cost").textContent = (
-      0.16 * parseFloat(document.querySelector(".ada-mb").textContent)
+      0.347545 * parseFloat(document.querySelector(".ada-mb").textContent)
     ).toFixed(2);
     // document.querySelector('.sell-binance-cost').textContent = (0.1*parseFloat(document.querySelector('.ada-binance').textContent)).toFixed(2);
   });
@@ -66,7 +66,7 @@ const computeGain = () => {
   let adaPriceMb = parseFloat(document.querySelector(".ada-mb").textContent);
   let investimentoRaw = document.querySelector("#currency-field").value;
   investimento = parseInt(
-    investimentoRaw.split(" ")[1].split(".")[0].replace(",", "")
+    investimentoRaw.split(" ")[1].split(".")[0].replaceAll(",", "")
   );
   console.log(adaPriceBinance);
   console.log(adaPriceMb);
@@ -74,22 +74,23 @@ const computeGain = () => {
   let net;
 
   if (adaPriceBinance > adaPriceMb) {
-    let adaQtdMb = investimento / adaPriceMb;
-    // buy/sell cost
-    adaQtdMb = adaQtdMb - 1.3;
+    // buy/sell cost (0.347545 ADA)
+    let adaQtdMb = (investimento - 0.347545 * adaPriceBinance) / adaPriceMb;
+    console.log(adaQtdMb);
+    // adaQtdMb = adaQtdMb-1.3;
     // transfer cost
     let adaQtdBinance = adaQtdMb - adaPriceMb;
-    adaQtdBinance = adaQtdBinance * (1 - 0.001);
-    let brlBinance = adaQtdBinance * adaPriceBinance;
+    let brlBinance = adaQtdBinance * adaPriceBinance * (1 - 0.001);
     net = brlBinance - investimento;
   } else if (adaPriceBinance < adaPriceMb) {
     let adaQtdBinance = investimento / adaPriceBinance;
-    // buy/sell cost
-    adaQtdBinance = adaQtdBinance * (1 - 0.001);
     // transfer cost
     let adaQtdMb = adaQtdBinance - adaPriceBinance;
-    let brlMb = adaQtdMb * adaPriceMb;
+    // buy/sell cost
+    brlMb = adaQtdMb * adaPriceMb * (1 - 0.001);
     net = brlMb - investimento;
+  } else {
+    let net = 0;
   }
   document.querySelector(".result").textContent = net.toFixed(2);
 };
@@ -175,3 +176,31 @@ function formatCurrency(input, blur) {
   caret_pos = updated_len - original_len + caret_pos;
   input[0].setSelectionRange(caret_pos, caret_pos);
 }
+
+// https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+// function timeConverter(UNIX_timestamp) {
+//   var a = new Date(UNIX_timestamp * 1000);
+//   var months = [
+//     "Jan",
+//     "Feb",
+//     "Mar",
+//     "Apr",
+//     "May",
+//     "Jun",
+//     "Jul",
+//     "Aug",
+//     "Sep",
+//     "Oct",
+//     "Nov",
+//     "Dec",
+//   ];
+//   var year = a.getFullYear();
+//   var month = months[a.getMonth()];
+//   var date = a.getDate();
+//   var hour = a.getHours();
+//   var min = a.getMinutes();
+//   var sec = a.getSeconds();
+//   var time =
+//     date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
+//   return time;
+// }
